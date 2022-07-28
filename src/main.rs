@@ -89,6 +89,11 @@ fn get_info_from_args() -> Person {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let current_person = get_info_from_args();
+    println!(
+        "topic: {}, name: {}",
+        TOPIC.get().unwrap().id(),
+        current_person.alias
+    );
 
     let id_keys = identity::Keypair::generate_ed25519();
     let peer_id = PeerId::from(id_keys.public());
@@ -132,7 +137,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 let msg = line.expect("can not get line").expect("can not read line from stdin");
                 send_message(msg, &mut swarm);
             }
-            _event = swarm.select_next_some() => { 
+            _event = swarm.select_next_some() => {
                 continue;
             }
         }
